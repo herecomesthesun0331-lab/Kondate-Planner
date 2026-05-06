@@ -1,0 +1,17 @@
+{
+  "name": "今日の献立",
+  "short_name": "献立",
+  "description": "自分の献立登録、気分タグ検索、材料と調理方法の確認ができる献立サポートアプリです。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6efe4",
+  "theme_color": "#c94f32",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

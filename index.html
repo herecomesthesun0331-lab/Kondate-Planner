@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#c94f32" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="今日の献立" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>献立サポート</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar" aria-label="献立サポート">
+        <div>
+          <p class="eyebrow">Menu Planner</p>
+          <h1><span class="title-icon" aria-hidden="true"></span>今日の献立</h1>
+        </div>
+        <div class="today-card">
+          <span id="todayLabel">今日</span>
+          <strong id="selectedCount">0件</strong>
+        </div>
+      </section>
+
+      <section class="entry-panel" aria-label="自分の献立登録">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">My Recipe</p>
+            <h2>自分の献立登録</h2>
+          </div>
+          <button class="ghost-button" id="clearStorageButton" type="button">登録データを全削除</button>
+        </div>
+
+        <form id="menuForm" class="menu-form">
+          <label>
+            献立名
+            <input id="menuTitle" name="title" type="text" placeholder="例：豚のしょうが焼き定食" required />
+          </label>
+          <label>
+            調理時間
+            <input id="menuTime" name="time" type="number" min="1" max="240" placeholder="25" />
+          </label>
+          <label>
+            写真
+            <input id="menuPhoto" name="photo" type="file" accept="image/*" />
+          </label>
+          <label class="wide">
+            メモ
+            <input id="menuDescription" name="description" type="text" placeholder="例：忙しい日でも作りやすい定番献立" />
+          </label>
+
+          <fieldset class="wide mood-fieldset">
+            <legend>気分タグ</legend>
+            <div class="mood-grid" id="formMoodGrid"></div>
+            <div class="custom-tag-row">
+              <input id="customTagInput" type="text" placeholder="例：節約、子ども向け、作り置き" />
+              <button class="ghost-button" id="addTagButton" type="button">タグ追加</button>
+            </div>
+          </fieldset>
+
+          <label class="wide">
+            材料
+            <textarea id="menuIngredients" name="ingredients" rows="4" placeholder="1行に1つずつ入力&#10;豚ロース薄切り 250g&#10;玉ねぎ 1/2個" required></textarea>
+          </label>
+          <label class="wide">
+            調理方法
+            <textarea id="menuSteps" name="steps" rows="4" placeholder="1行に1手順ずつ入力&#10;玉ねぎを薄切りにする&#10;豚肉を焼いてたれを絡める" required></textarea>
+          </label>
+
+          <div class="form-actions wide">
+            <button class="primary-button" type="submit">献立を登録</button>
+            <button class="ghost-button" id="formResetButton" type="reset">入力クリア</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="controls" aria-label="献立検討">
+        <div class="control-group">
+          <h2><span class="section-icon dish-icon" aria-hidden="true"></span>献立選択</h2>
+          <div class="segmented" role="tablist" aria-label="献立の種類">
+            <button class="segment active" data-source="all" type="button">すべて</button>
+            <button class="segment" data-source="my" type="button">自分の登録献立</button>
+            <button class="segment" data-source="site" type="button">レシピサイトで探す</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h2><span class="section-icon spoon-icon" aria-hidden="true"></span>献立提案</h2>
+          <div class="mood-grid" id="filterMoodGrid" aria-label="気分で選ぶ"></div>
+        </div>
+      </section>
+
+      <section class="layout">
+        <aside class="menu-list" aria-label="献立候補">
+          <div class="section-heading">
+            <h2>候補</h2>
+            <button class="ghost-button" id="resetButton" type="button">条件クリア</button>
+          </div>
+          <div id="menuCards" class="cards"></div>
+        </aside>
+
+        <section class="details" aria-live="polite">
+          <div class="detail-header">
+            <div id="detailPhoto" class="detail-photo" aria-hidden="true"></div>
+            <div>
+              <p id="detailSource" class="source-label">献立</p>
+              <h2 id="detailTitle">献立を登録、またはサイトを選んでください</h2>
+            </div>
+            <span id="detailTime" class="time-pill">--分</span>
+          </div>
+
+          <p id="detailDescription" class="description">
+            自分の献立を登録すると、材料と調理方法をここで確認できます。
+          </p>
+
+          <div class="detail-tags" id="detailTags"></div>
+          <div id="siteLinks" class="site-links"></div>
+
+          <div class="detail-columns">
+            <div class="panel">
+              <h3>材料</h3>
+              <ul id="ingredientsList"></ul>
+            </div>
+            <div class="panel">
+              <h3>調理方法</h3>
+              <ol id="stepsList"></ol>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+      if ("serviceWorker" in navigator && location.protocol !== "file:") {
+        navigator.serviceWorker.register("./sw.js");
+      }
+    </script>
+  </body>
+</html>
