@@ -1,5 +1,7 @@
 const STORAGE_KEY = "menu-planner-my-menus";
 const TAG_STORAGE_KEY = "menu-planner-custom-tags";
+const ACCESS_KEY = "2525";
+const ACCESS_SESSION_KEY = "menu-planner-access-ok";
 
 const defaultMoods = [
   "あっさり",
@@ -85,6 +87,10 @@ const clearStorageButton = document.querySelector("#clearStorageButton");
 const customTagInput = document.querySelector("#customTagInput");
 const addTagButton = document.querySelector("#addTagButton");
 const menuForm = document.querySelector("#menuForm");
+const lockScreen = document.querySelector("#lockScreen");
+const lockForm = document.querySelector("#lockForm");
+const passwordInput = document.querySelector("#passwordInput");
+const lockError = document.querySelector("#lockError");
 
 const formatter = new Intl.DateTimeFormat("ja-JP", {
   month: "long",
@@ -96,6 +102,7 @@ todayLabel.textContent = formatter.format(new Date());
 
 renderMoodControls();
 bindEvents();
+setupAccessLock();
 render();
 
 function renderMoodControls() {
@@ -187,6 +194,34 @@ function bindEvents() {
     menuForm.reset();
     render();
   });
+}
+
+function setupAccessLock() {
+  if (sessionStorage.getItem(ACCESS_SESSION_KEY) === "true") {
+    unlockApp();
+    return;
+  }
+
+  document.body.classList.add("locked");
+  passwordInput?.focus();
+
+  lockForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (passwordInput.value === ACCESS_KEY) {
+      sessionStorage.setItem(ACCESS_SESSION_KEY, "true");
+      unlockApp();
+      return;
+    }
+
+    lockError.textContent = "合言葉が違います。";
+    passwordInput.value = "";
+    passwordInput.focus();
+  });
+}
+
+function unlockApp() {
+  document.body.classList.remove("locked");
+  lockScreen.setAttribute("hidden", "");
 }
 
 function fileToDataUrl(file) {

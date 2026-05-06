@@ -13,6 +13,23 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <section class="lock-screen" id="lockScreen" aria-label="合言葉入力">
+      <div class="lock-card">
+        <span class="food-mark large pot" aria-hidden="true"></span>
+        <p class="eyebrow">Family Access</p>
+        <h1>家族の献立帳</h1>
+        <p class="lock-copy">合言葉を入力してください。</p>
+        <form id="lockForm" class="lock-form">
+          <label>
+            合言葉
+            <input id="passwordInput" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="primary-button" type="submit">開く</button>
+        </form>
+        <p class="lock-error" id="lockError" role="alert"></p>
+      </div>
+    </section>
+
     <main class="app-shell">
       <section class="topbar" aria-label="献立サポート">
         <div>
